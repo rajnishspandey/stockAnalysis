@@ -10,9 +10,8 @@ app = Flask(__name__)
 def MA(df, period):
     return df['Close'].rolling(period).mean()
 
-def generate_plot(stock_code):
+def generate_plot(stock_code, stock_name):  # Added stock_name as an argument
     NS = '.NS'
-    nsecode = nseCode()
     today = datetime.now().date()
     dateform = "%Y-%m-%d"
     todays_date = today.strftime(dateform)
@@ -48,7 +47,7 @@ def generate_plot(stock_code):
                    mode='markers', marker=dict(symbol='triangle-down', color='red', size=15), name='Sell Signal')
     ])
 
-    fig.update_layout(title=stock_code,
+    fig.update_layout(title=stock_code + ' - ' + stock_name,  # Updated title to include stock_name
                       xaxis_title='Date',
                       yaxis_title='Price',
                       xaxis_rangeslider_visible=False,
@@ -72,13 +71,18 @@ def generate_plot(stock_code):
 @app.route('/')
 def index():
     nsecodes = nseCode()
+
+    # Extract stock codes and names from nseCode() output
+    stock_codes = [stock[0] for stock in nsecodes]
+    stock_names = [stock[1] for stock in nsecodes]
+
     plots = []
 
-    for stock_code in nsecodes:
-        fig = generate_plot(stock_code)
+    for stock_code, stock_name in nsecodes:
+        fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
         plots.append(fig.to_html(full_html=False))
 
-    return render_template('index.html', plots=plots)
+    return render_template('index.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
