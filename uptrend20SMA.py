@@ -16,11 +16,9 @@ def nseCode():
         data = s.post(url, headers=header, data=condition).json()
 
         stock_list = pd.DataFrame(data["data"])
-        # print(stock_list)
-
-    # print(stock_list)
 
     df = pd.DataFrame(stock_list)
-    nsecode = df["nsecode"].values
+    nsecode =  df[['nsecode', 'name']].values
     return nsecode
     
+nseCode()
