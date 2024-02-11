@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Analysis</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        .plot-container {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: auto;  /* Enable horizontal scrolling on small screens */
+        }
+
+        hr {
+            margin: 20px 0;
+        }
+
+        /* Add more styles as needed */
+    </style>
+</head>
+<body>
+    <a href="{{ url_for('index') }}">Home</a>
+    <h1> SMA 20 & 50 Days crossed Stock Analysis</h1>
+    
+    {% for i in range(stock_codes|length) %}
+        <div class="plot-container">
+            {{ plots[i]|safe }}
+        </div>
+        <hr> <!-- Optional: Add a horizontal line between plots for better separation -->
+    {% endfor %}
+</body>
+</html>

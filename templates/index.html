@@ -7,41 +7,69 @@
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             margin: 20px;
+            background-color: #f8f8f8;
+            color: #333;
         }
 
         h1 {
             text-align: center;
+            color: #007BFF;
+            margin-bottom: 20px;
         }
 
         h2 {
             margin-bottom: 10px;
+            color: #007BFF;
+        }
+
+        a {
+            color: #007BFF;
+            text-decoration: none;
+            margin-right: 20px;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .nav-container {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .plot-container {
-            background-color: #f9f9f9;
-            padding: 10px;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            overflow: auto;  /* Enable horizontal scrolling on small screens */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         hr {
             margin: 20px 0;
+            border: none;
+            border-top: 1px solid #ddd;
         }
 
         /* Add more styles as needed */
     </style>
 </head>
 <body>
-    <h1>Trending(volatile) Stock Analysis</h1>
-    
-    {% for i in range(stock_codes|length) %}
-        <div class="plot-container">
-            {{ plots[i]|safe }}
-        </div>
-        <hr> <!-- Optional: Add a horizontal line between plots for better separation -->
-    {% endfor %}
+    <div class="nav-container">
+        <h1>Stock Analysis</h1>
+        <a href="{{ url_for('uptrend20sma') }}">Uptrend Analysis</a>
+        <a href="{{ url_for('near20sma') }}">Near 20SMA Analysis for short term</a>
+    </div>
+
+    {% block content %}
+    {% endblock %}
+
+    <hr>
+
+    <footer>
+        <p>&copy; 2024 Stock Analysis</p>
+    </footer>
 </body>
 </html>
