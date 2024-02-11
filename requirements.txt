@@ -1,0 +1,8 @@
+numpy
+yfinance
+plotly
+datetime
+bs4
+requests
+pandas
+gunicorn
