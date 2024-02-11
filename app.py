@@ -1,9 +1,10 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, url_for
 from datetime import datetime, timedelta
 import numpy as np
 import yfinance as yf
 import plotly.graph_objects as go
 from uptrend20SMA import nseCode
+from near20sma import nseDetails
 
 app = Flask(__name__)
 
@@ -67,9 +68,12 @@ def generate_plot(stock_code, stock_name):  # Added stock_name as an argument
 
     return fig
 
-
-@app.route('/')
+@app.route("/")
 def index():
+    return render_template("index.html")
+
+@app.route('/uptrend')
+def uptrend20sma():
     nsecodes = nseCode()
 
     # Extract stock codes and names from nseCode() output
@@ -82,7 +86,23 @@ def index():
         fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
         plots.append(fig.to_html(full_html=False))
 
-    return render_template('index.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
+    return render_template('uptrend20sma.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
+
+@app.route('/near20sma')
+def near20sma():
+    nsecodes = nseDetails()
+
+    # Extract stock codes and names from nseCode() output
+    stock_codes = [stock[0] for stock in nsecodes]
+    stock_names = [stock[1] for stock in nsecodes]
+
+    plots = []
+
+    for stock_code, stock_name in nsecodes:
+        fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
+        plots.append(fig.to_html(full_html=False))
+
+    return render_template('near20sma.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
