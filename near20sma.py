@@ -20,5 +20,3 @@ def nseDetails():
     df = pd.DataFrame(stock_list)
     nsecode =  df[['nsecode', 'name']].values
     return nsecode
-    
-nseDetails()
