@@ -11,7 +11,7 @@ app = Flask(__name__)
 def MA(df, period):
     return df['Close'].rolling(period).mean()
 
-def generate_plot(stock_code, stock_name):  # Added stock_name as an argument
+def generate_plot(stock_code, stock_name):
     NS = '.NS'
     today = datetime.now().date()
     dateform = "%Y-%m-%d"
@@ -74,35 +74,43 @@ def index():
 
 @app.route('/uptrend')
 def uptrend20sma():
-    nsecodes = nseCode()
+    try:
+        nsecodes = nseCode()
 
-    # Extract stock codes and names from nseCode() output
-    stock_codes = [stock[0] for stock in nsecodes]
-    stock_names = [stock[1] for stock in nsecodes]
+        # Extract stock codes and names from nseCode() output
+        stock_codes = [stock[0] for stock in nsecodes]
+        stock_names = [stock[1] for stock in nsecodes]
 
-    plots = []
+        plots = []
 
-    for stock_code, stock_name in nsecodes:
-        fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
-        plots.append(fig.to_html(full_html=False))
+        for stock_code, stock_name in nsecodes:
+            fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
+            plots.append(fig.to_html(full_html=False))
 
-    return render_template('uptrend20sma.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
+        return render_template('uptrend20sma.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
+    except Exception:
+        message = "There is no data in the filter today"
+        return render_template('uptrend20sma.html', message=message)
 
 @app.route('/near20sma')
 def near20sma():
-    nsecodes = nseDetails()
+    try:
+        nsecodes = nseDetails()
 
-    # Extract stock codes and names from nseCode() output
-    stock_codes = [stock[0] for stock in nsecodes]
-    stock_names = [stock[1] for stock in nsecodes]
+        # Extract stock codes and names from nseCode() output
+        stock_codes = [stock[0] for stock in nsecodes]
+        stock_names = [stock[1] for stock in nsecodes]
 
-    plots = []
+        plots = []
 
-    for stock_code, stock_name in nsecodes:
-        fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
-        plots.append(fig.to_html(full_html=False))
+        for stock_code, stock_name in nsecodes:
+            fig = generate_plot(stock_code, stock_name)  # Pass stock_name to generate_plot
+            plots.append(fig.to_html(full_html=False))
 
-    return render_template('near20sma.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
-
+        return render_template('near20sma.html', stock_codes=stock_codes, stock_names=stock_names, plots=plots)
+    except Exception:
+        message = "There is no data in the filter today"
+        return render_template('near20sma.html', message=message)
+      
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True)
